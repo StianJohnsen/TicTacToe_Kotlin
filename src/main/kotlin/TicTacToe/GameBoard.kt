@@ -1,17 +1,22 @@
 package TicTacToe
 
 class GameBoard(val rows: Int = 3, val columns: Int = 3) {
-    val finalList:List<List<String>> = mutableListOf()
+    val _rows = rows
+    val _columns = columns
+    fun makeList(): List<List<String>> {
+        val rows = MutableList(_rows) { "" }
+        val finalList = MutableList(_columns) { rows }
+        return finalList
 
-    fun makeList(){
-    for (i in 0..rows){
-        println(i)
+
     }
-    }
+
+    val list = makeList()
 }
 
 fun main() {
     val test = GameBoard()
-    test.makeList()
+    println(test.makeList())
+
 
 }
