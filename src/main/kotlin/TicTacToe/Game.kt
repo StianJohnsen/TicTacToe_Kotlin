@@ -1,13 +1,13 @@
 package TicTacToe
 
-abstract class Game {
-    abstract fun checkRows()
-    abstract fun checkColumns()
-    abstract fun checkDiagonals()
-    abstract fun printGameBoard()
-    abstract fun isValidMove(row: Int, column: Int, player: Int)
-    abstract fun isDone(): Boolean
-    abstract fun putOnBoard(sign:String,lst:List<String>,row: Int, column: Int)
+interface Game {
+    fun checkRows()
+    fun checkColumns()
+    fun checkDiagonals()
+    fun printGameBoard(lst: List<List<String>>)
+    fun isValidMove(lst: List<List<String>>, row: Int, column: Int): Boolean
+    fun isDone(): Boolean
+    fun putOnBoard(sign: String, lst: List<List<String>>, row: Int, column: Int)
 
 
 }
