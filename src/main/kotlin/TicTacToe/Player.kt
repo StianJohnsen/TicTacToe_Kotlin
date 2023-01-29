@@ -11,3 +11,9 @@ interface Player {
 
 }
 
+fun main(){
+    for (i in 0..6){
+        println(i%2)
+    }
+}
+
