@@ -14,34 +14,30 @@ class TicTacToeGame : Game, Player, GameBoard() {
         return ("The winner is: $sign")
     }
 
-    override fun checkRows(lst: List<List<String>>, row: Int): Int {
-        val players = arrayOf("X", "O")
+    override fun checkRows(lst: List<List<String>>, row: Int, sign: String): Int {
+
 
         val currentRow = lst[row]
 
-        players.forEach {
-            if (currentRow[0] == it && currentRow[1] == it && currentRow[2] == it) {
-                return row
-            }
-
+        if (currentRow[0] == sign && currentRow[1] == sign && currentRow[2] == sign) {
+            return row
         }
+
+
         return -1
     }
 
 
-    override fun checkColumns(lst: List<List<String>>, column: Int): Int {
-        val players = arrayOf("X", "O")
+    override fun checkColumns(lst: List<List<String>>, column: Int, sign: String): Int {
 
-        val listOfTrues = mutableListOf<Boolean>()
+
+        val listOfTrues = mutableListOf<Boolean>(false, false, false)
         for (i in 0..lst.size - 1) {
             val currentLst = lst[i]
-            players.forEach {
-                if (currentLst[column] == it) {
-                    listOfTrues.add(true)
-                } else {
-                    listOfTrues.add(false)
-                }
+            if (currentLst[column] == sign) {
+                listOfTrues[i] = true
             }
+
 
             if (listOfTrues[0] == true && listOfTrues[1] == true && listOfTrues[2] == true) {
                 return i
@@ -51,18 +47,17 @@ class TicTacToeGame : Game, Player, GameBoard() {
         return -1
     }
 
-    override fun checkDiagonals(lst: List<List<String>>): Int {
-        val players = arrayOf("X", "O")
+    override fun checkDiagonals(lst: List<List<String>>, sign: String): Int {
         val firstRow = lst[0]
         val secondRow = lst[1]
         val thirdRow = lst[2]
-        players.forEach {
-            if (firstRow[0] == it && secondRow[1] == it && thirdRow[2] == it) {
-                return 1
-            } else if (firstRow[2] == it && secondRow[1] == it && thirdRow[0] == it) {
-                return 2
-            }
+
+        if (firstRow[0] == sign && secondRow[1] == sign && thirdRow[2] == sign) {
+            return 1
+        } else if (firstRow[2] == sign && secondRow[1] == sign && thirdRow[0] == sign) {
+            return 2
         }
+
 
         return -1
 
@@ -85,8 +80,12 @@ class TicTacToeGame : Game, Player, GameBoard() {
         }
     }
 
-    override fun isDone(lst: List<List<String>>, row: Int, column: Int): Boolean {
-        if (checkRows(lst, row) != -1 || checkColumns(lst, column) != -1 || checkDiagonals(lst) != -1) {
+    override fun isDone(lst: List<List<String>>, row: Int, column: Int, sign: String): Boolean {
+        if (checkRows(lst, row, sign) != -1 || checkColumns(lst, column, sign) != -1 || checkDiagonals(
+                lst,
+                sign
+            ) != -1
+        ) {
             return true
         }
         return false
@@ -129,7 +128,7 @@ fun main() {
             currentLst.forEach {
                 println(it)
             }
-            if (game.isDone(currentLst, inputRow, inputColumn)) {
+            if (game.isDone(currentLst, inputRow, inputColumn, currentPlayer)) {
                 println(game.printWinner(currentPlayer))
                 break
             }
