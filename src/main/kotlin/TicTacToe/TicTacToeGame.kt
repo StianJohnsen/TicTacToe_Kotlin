@@ -3,15 +3,30 @@ package TicTacToe
 import java.awt.color.ICC_ColorSpace
 
 class TicTacToeGame : Game, Player, GameBoard() {
+    init {
+        println("Setting up your board with $rows rows and $columns columns...\n")
+    }
+
     override val player1Sign: String = "X"
     override val player2Sign: String = "O"
 
     val gameboard = GameBoard()
     val currentLst = gameboard.list.toMutableList()
 
+    fun isLstFull(lst: List<List<String>>): Boolean {
+        for (i in lst) {
+            for (j in i) {
+                if (j == "") {
+                    return false
+                }
+
+            }
+        }
+        return true
+    }
 
     override fun printWinner(sign: String): String {
-        return ("The winner is: $sign")
+        return ("\nThe winner is: $sign")
     }
 
     override fun checkRows(lst: List<List<String>>, row: Int, sign: String): Int {
@@ -63,19 +78,19 @@ class TicTacToeGame : Game, Player, GameBoard() {
 
     }
 
-    override fun isValidMove(lst: List<List<String>>, row: Int, column: Int): Boolean {
-        val _lst = lst
-        val _row = row
-        val _column = column
-        val _lstWRow = _lst[row]
-        return _lstWRow[column] == ""
-    }
+    val isValidMove = {lst:List<List<String>>, row: Int, column: Int ->
+        lst[row][column] == ""}
+
 
     override fun printGameBoard(lst: List<List<String>>) {
         for (i in lst) {
-            println("\n")
+            print("\n")
             for (j in i) {
-                print(j)
+                if (j == "") {
+                    print(" _")
+                } else {
+                    print(" $j")
+                }
             }
         }
     }
@@ -113,27 +128,28 @@ fun main() {
 
     while (true) {
         val currentPlayerCounter = playerCounter % 2
-        //println(currentPlayerCounter)
+
         var currentPlayer = players[currentPlayerCounter]
         playerCounter++
         //println(playerCounter)
-        println("Current player is: $currentPlayer")
+        println("\nCurrent player is: $currentPlayer")
         print("Input your row: ")
         val inputRow = readLine()!!.toInt()
         print("\nInput your column: ")
         val inputColumn = readLine()!!.toInt()
 
         if (game.isValidMove(currentLst, inputRow, inputColumn)) {
+            println("Current board:")
             currentLst = game.putOnBoard(players[currentPlayerCounter], inputRow, inputColumn)
-            currentLst.forEach {
-                println(it)
-            }
+            game.printGameBoard(currentLst)
             if (game.isDone(currentLst, inputRow, inputColumn, currentPlayer)) {
                 println(game.printWinner(currentPlayer))
                 break
+            } else if (game.isLstFull(currentLst)) {
+                println("\nTie!")
+
+
             }
-
-
         } else {
             playerCounter--
             println("Try different location!")
