@@ -1,8 +1,8 @@
-package TicTacToe
+package ticTacToe
 
-import java.awt.color.ICC_ColorSpace
 
-class TicTacToeGame(val rows: Int = 3, val columns: Int = 3) : Game, Player,GameBoard() {
+
+class TicTacToeGame(private val rows: Int = 3, private val columns: Int = 3) : Game, Player, GameBoard() {
     init {
         println("Setting up your board with $rows rows and $columns columns...\n")
     }
@@ -10,13 +10,7 @@ class TicTacToeGame(val rows: Int = 3, val columns: Int = 3) : Game, Player,Game
     override val player1Sign: String = "X"
     override val player2Sign: String = "O"
 
-    val currentLst = makeList(rows,columns)
-    val currentLst2 = currentLst
-
-
-
-
-
+    val currentLst = makeList(rows, columns)
 
     fun isLstFull(lst: List<List<String>>): Boolean {
         for (i in lst) {
@@ -51,15 +45,15 @@ class TicTacToeGame(val rows: Int = 3, val columns: Int = 3) : Game, Player,Game
     override fun checkColumns(lst: List<List<String>>, column: Int, sign: String): Int {
 
 
-        val listOfTrues = mutableListOf<Boolean>(false, false, false)
-        for (i in 0..lst.size - 1) {
+        val listOfTrues = mutableListOf(false, false, false)
+        for (i in lst.indices) {
             val currentLst = lst[i]
             if (currentLst[column] == sign) {
                 listOfTrues[i] = true
             }
 
 
-            if (listOfTrues[0] == true && listOfTrues[1] == true && listOfTrues[2] == true) {
+            if (listOfTrues[0] && listOfTrues[1] && listOfTrues[2]) {
                 return i
             }
         }
@@ -83,8 +77,9 @@ class TicTacToeGame(val rows: Int = 3, val columns: Int = 3) : Game, Player,Game
 
     }
 
-    val isValidMove = {lst:List<List<String>>, row: Int, column: Int ->
-        lst[row][column] == ""}
+    val isValidMove = { lst: List<List<String>>, row: Int, column: Int ->
+        lst[row][column] == ""
+    }
 
 
     override fun printGameBoard(lst: List<List<String>>) {
@@ -112,11 +107,11 @@ class TicTacToeGame(val rows: Int = 3, val columns: Int = 3) : Game, Player,Game
     }
 
     override fun putOnBoard(lst: List<List<String>>, sign: String, row: Int, column: Int): MutableList<List<String>> {
-        val lst = lst.toMutableList()
-        val rowsLst = lst[row].toMutableList()
+        val currentLst = lst.toMutableList()
+        val rowsLst = currentLst[row].toMutableList()
         rowsLst[column] = sign
-        lst[row] = rowsLst
-        return lst
+        currentLst[row] = rowsLst
+        return currentLst
     }
 }
 
@@ -134,18 +129,18 @@ fun main() {
     while (true) {
         val currentPlayerCounter = playerCounter % 2
 
-        var currentPlayer = players[currentPlayerCounter]
+        val currentPlayer = players[currentPlayerCounter]
         playerCounter++
         //println(playerCounter)
         println("\nCurrent player is: $currentPlayer")
         print("Input your row: ")
-        val inputRow = readLine()!!.toInt()
+        val inputRow = readln().toInt()
         print("\nInput your column: ")
-        val inputColumn = readLine()!!.toInt()
+        val inputColumn = readln().toInt()
 
         if (game.isValidMove(currentLst, inputRow, inputColumn)) {
             println("Current board:")
-            currentLst = game.putOnBoard(currentLst,players[currentPlayerCounter], inputRow, inputColumn)
+            currentLst = game.putOnBoard(currentLst, players[currentPlayerCounter], inputRow, inputColumn)
             game.printGameBoard(currentLst)
             if (game.isDone(currentLst, inputRow, inputColumn, currentPlayer)) {
                 println(game.printWinner(currentPlayer))
@@ -161,13 +156,3 @@ fun main() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
