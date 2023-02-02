@@ -2,7 +2,7 @@ package TicTacToe
 
 import java.awt.color.ICC_ColorSpace
 
-class TicTacToeGame : Game, Player, GameBoard() {
+class TicTacToeGame(val rows: Int = 3, val columns: Int = 3) : Game, Player,GameBoard() {
     init {
         println("Setting up your board with $rows rows and $columns columns...\n")
     }
@@ -10,8 +10,13 @@ class TicTacToeGame : Game, Player, GameBoard() {
     override val player1Sign: String = "X"
     override val player2Sign: String = "O"
 
-    val gameboard = GameBoard()
-    val currentLst = gameboard.list.toMutableList()
+    val currentLst = makeList(rows,columns)
+    val currentLst2 = currentLst
+
+
+
+
+
 
     fun isLstFull(lst: List<List<String>>): Boolean {
         for (i in lst) {
@@ -106,8 +111,8 @@ class TicTacToeGame : Game, Player, GameBoard() {
         return false
     }
 
-    override fun putOnBoard(sign: String, row: Int, column: Int): MutableList<List<String>> {
-        val lst = currentLst
+    override fun putOnBoard(lst: List<List<String>>, sign: String, row: Int, column: Int): MutableList<List<String>> {
+        val lst = lst.toMutableList()
         val rowsLst = lst[row].toMutableList()
         rowsLst[column] = sign
         lst[row] = rowsLst
@@ -121,10 +126,10 @@ fun main() {
 
     val player1 = game.player1Sign
     val player2 = game.player2Sign
-    var currentLst = game.list
+    var currentLst = game.currentLst.toMutableList()
     var playerCounter = 0
     val players = arrayOf(player1, player2)
-    println("Player 1 will have the sign: X\nWhilest Player 2 will have the sign: O")
+    println("Player 1 will have the sign: X\nWhile Player 2 will have the sign: O")
 
     while (true) {
         val currentPlayerCounter = playerCounter % 2
@@ -140,7 +145,7 @@ fun main() {
 
         if (game.isValidMove(currentLst, inputRow, inputColumn)) {
             println("Current board:")
-            currentLst = game.putOnBoard(players[currentPlayerCounter], inputRow, inputColumn)
+            currentLst = game.putOnBoard(currentLst,players[currentPlayerCounter], inputRow, inputColumn)
             game.printGameBoard(currentLst)
             if (game.isDone(currentLst, inputRow, inputColumn, currentPlayer)) {
                 println(game.printWinner(currentPlayer))
